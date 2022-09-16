@@ -32,11 +32,23 @@ function onImgClick(event) {
   if (target.nodeName !== 'IMG') {
     return;
   }
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <img src="${largeImg}" alt="${alt}">
-  `);
+  `,
+    {
+      onShow: () => window.addEventListener('keydown', onEscClick),
+      onClose: () => window.removeEventListener('keydown', onEscClick),
+    }
+  );
 
   instance.show();
+
+  function onEscClick(event) {
+    if (event.code === 'Escape') {
+      instance.close();
+    }
+  }
 }
 
 console.log(galleryItems);
